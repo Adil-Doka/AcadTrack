@@ -34,8 +34,11 @@ export const PhasesManagePage: React.FC = () => {
   const [phaseForm, setPhaseForm] = useState({
     name: '',
     description: '',
+    openingDate: '',
     deadline: '',
     orderIndex: 1,
+    maxMarks: 100,
+    requiredDocuments: 'PDF, Report, Code archive',
     reason: '',
   });
 
@@ -113,8 +116,11 @@ export const PhasesManagePage: React.FC = () => {
     setPhaseForm({
       name: '',
       description: '',
+      openingDate: new Date().toISOString().slice(0, 16),
       deadline: '',
       orderIndex: (phases?.length || 0) + 1,
+      maxMarks: 100,
+      requiredDocuments: 'PDF, Report, Code archive',
       reason: '',
     });
     setIsPhaseModalOpen(true);
@@ -124,9 +130,12 @@ export const PhasesManagePage: React.FC = () => {
     setEditingPhaseId(p.id);
     setPhaseForm({
       name: p.name,
-      description: p.description,
-      deadline: p.deadline.slice(0, 16), // datetime-local format
-      orderIndex: p.orderIndex,
+      description: p.description || '',
+      openingDate: p.openingDate ? p.openingDate.slice(0, 16) : new Date().toISOString().slice(0, 16),
+      deadline: p.deadline ? p.deadline.slice(0, 16) : '',
+      orderIndex: p.sequenceOrder || p.orderIndex || 1,
+      maxMarks: p.maxMarks || 100,
+      requiredDocuments: p.requiredDocuments || 'PDF, Report, Code archive',
       reason: '',
     });
     setIsPhaseModalOpen(true);
@@ -140,16 +149,23 @@ export const PhasesManagePage: React.FC = () => {
         data: {
           name: phaseForm.name,
           description: phaseForm.description,
+          openingDate: phaseForm.openingDate,
           deadline: phaseForm.deadline,
-          reason: phaseForm.reason || undefined,
+          maxMarks: phaseForm.maxMarks,
+          requiredDocuments: phaseForm.requiredDocuments,
+          sequenceOrder: phaseForm.orderIndex,
+          deadlineChangeReason: phaseForm.reason || undefined,
         },
       });
     } else if (activeCycleId) {
       createPhaseMutation.mutate({
         name: phaseForm.name,
         description: phaseForm.description,
+        openingDate: phaseForm.openingDate,
         deadline: phaseForm.deadline,
-        orderIndex: phaseForm.orderIndex,
+        maxMarks: phaseForm.maxMarks,
+        requiredDocuments: phaseForm.requiredDocuments,
+        sequenceOrder: phaseForm.orderIndex,
         cycleId: activeCycleId,
       });
     }

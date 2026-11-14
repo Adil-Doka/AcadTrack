@@ -9,7 +9,12 @@ export interface User {
 
 export interface AuthResponse {
   token: string;
-  user: User;
+  pnr?: string;
+  name?: string;
+  email?: string;
+  role?: 'STUDENT' | 'COORDINATOR';
+  department?: string;
+  user?: User;
 }
 
 export interface AcademicCycle {

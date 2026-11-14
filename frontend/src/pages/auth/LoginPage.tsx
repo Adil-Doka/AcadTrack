@@ -19,9 +19,16 @@ export const LoginPage: React.FC = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: authApi.login,
-    onSuccess: (data) => {
-      login(data.token, data.user);
-      toast.success(`Welcome back, ${data.user.name}!`);
+    onSuccess: (data: any) => {
+      const userObj = data.user || {
+        pnr: data.pnr,
+        name: data.name,
+        email: data.email,
+        role: data.role,
+        department: data.department || '',
+      };
+      login(data.token, userObj);
+      toast.success(`Welcome back, ${userObj.name || userObj.pnr}!`);
       navigate('/dashboard');
     },
     onError: (err: any) => {

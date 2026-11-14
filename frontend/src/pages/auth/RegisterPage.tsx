@@ -29,9 +29,16 @@ export const RegisterPage: React.FC = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: authApi.register,
-    onSuccess: (data) => {
-      login(data.token, data.user);
-      toast.success(`Welcome, ${data.user.name}! Your account has been created.`);
+    onSuccess: (data: any) => {
+      const userObj = data.user || {
+        pnr: data.pnr || form.pnr,
+        name: data.name || form.name,
+        email: data.email || form.email,
+        role: data.role || form.role,
+        department: data.department || form.department,
+      };
+      login(data.token, userObj);
+      toast.success(`Welcome, ${userObj.name}! Your account has been created.`);
       navigate('/dashboard');
     },
     onError: (err: any) => {

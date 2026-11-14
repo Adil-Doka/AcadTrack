@@ -80,8 +80,8 @@ export const teamApi = {
     api.get<Team>('/teams/my-team', { params: { cycleId } }).then((r) => r.data),
   create: (data: { name: string; cycleId: number }) =>
     api.post<Team>('/teams', data).then((r) => r.data),
-  addMember: (teamId: number, data: { userPnr: string }) =>
-    api.post<Team>(`/teams/${teamId}/members`, data).then((r) => r.data),
+  addMember: (teamId: number, data: { pnr?: string; userPnr?: string }) =>
+    api.post<Team>(`/teams/${teamId}/members`, { pnr: data.pnr || data.userPnr }).then((r) => r.data),
   removeMember: (teamId: number, userId: number) =>
     api.delete<Team>(`/teams/${teamId}/members/${userId}`).then((r) => r.data),
   submit: (teamId: number) => api.post<Team>(`/teams/${teamId}/submit`).then((r) => r.data),
@@ -183,22 +183,27 @@ export const phaseApi = {
     data: Partial<{
       name: string;
       description: string;
+      openingDate?: string;
       deadline: string;
-      reason?: string;
+      requiredDocuments?: string;
       maxMarks?: number;
+      sequenceOrder?: number;
+      active?: boolean;
+      reason?: string;
+      deadlineChangeReason?: string;
     }>
   ) => {
     const payload: any = {
       name: data.name,
       description: data.description,
-      reason: data.reason,
+      openingDate: data.openingDate ? new Date(data.openingDate).toISOString() : new Date().toISOString(),
+      deadline: data.deadline ? new Date(data.deadline).toISOString() : new Date().toISOString(),
+      requiredDocuments: data.requiredDocuments || 'PDF, Report, Code archive',
+      maxMarks: data.maxMarks ?? 100,
+      sequenceOrder: data.sequenceOrder ?? 1,
+      active: data.active ?? true,
+      deadlineChangeReason: data.deadlineChangeReason || data.reason || undefined,
     };
-    if (data.deadline) {
-      payload.deadline = new Date(data.deadline).toISOString();
-    }
-    if (data.maxMarks !== undefined) {
-      payload.maxMarks = data.maxMarks;
-    }
     return api.put<Phase>(`/phases/${id}`, payload).then((r) => r.data);
   },
 };

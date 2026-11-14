@@ -132,13 +132,12 @@ export const StudentDashboard: React.FC = () => {
                     return (
                       <div key={phase.id} className="flex gap-4">
                         <div className="flex flex-col items-center">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                            hasSubmission
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${hasSubmission
                               ? 'bg-emerald-100 text-emerald-600'
                               : deadline.urgency === 'past'
-                              ? 'bg-red-100 text-red-500'
-                              : 'bg-slate-100 text-slate-400'
-                          }`}>
+                                ? 'bg-red-100 text-red-500'
+                                : 'bg-slate-100 text-slate-400'
+                            }`}>
                             {hasSubmission ? (
                               <CheckCircle2 className="w-4 h-4" />
                             ) : (
@@ -152,11 +151,10 @@ export const StudentDashboard: React.FC = () => {
                         <div className="pb-4 flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-2">
                             <p className="text-sm font-medium text-slate-900 truncate">{phase.name}</p>
-                            <span className={`text-xs whitespace-nowrap font-medium ${
-                              deadline.urgency === 'past' ? 'text-red-600' :
-                              deadline.urgency === 'today' ? 'text-amber-600' :
-                              deadline.urgency === 'soon' ? 'text-orange-500' : 'text-slate-400'
-                            }`}>
+                            <span className={`text-xs whitespace-nowrap font-medium ${deadline.urgency === 'past' ? 'text-red-600' :
+                                deadline.urgency === 'today' ? 'text-amber-600' :
+                                  deadline.urgency === 'soon' ? 'text-orange-500' : 'text-slate-400'
+                              }`}>
                               {deadline.text}
                             </span>
                           </div>
