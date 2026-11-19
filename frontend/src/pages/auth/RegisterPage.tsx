@@ -42,7 +42,12 @@ export const RegisterPage: React.FC = () => {
       navigate('/dashboard');
     },
     onError: (err: any) => {
-      toast.error(err.response?.data?.message || 'Registration failed. Please check your details.');
+      const msg =
+        err.response?.data?.message ||
+        (err.response?.data?.fieldErrors ? Object.values(err.response.data.fieldErrors)[0] : null) ||
+        err.message ||
+        'Registration failed. Please check your details.';
+      toast.error(msg as string);
     },
   });
 

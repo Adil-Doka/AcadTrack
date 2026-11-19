@@ -57,7 +57,7 @@ export const App: React.FC = () => {
 
         {/* Student Specific Routes */}
         <Route path="/team" element={<MyTeamPage />} />
-        <Route path="/project" element={<MyProjectPage />} />
+        <Route path="/project" element={isCoordinator ? <Navigate to="/projects" replace /> : <MyProjectPage />} />
 
         {/* Role Adaptive Routes */}
         <Route
@@ -80,7 +80,7 @@ export const App: React.FC = () => {
         />
         <Route
           path="/projects"
-          element={isCoordinator ? <ProjectsManagePage /> : <Navigate to="/dashboard" replace />}
+          element={isCoordinator ? <ProjectsManagePage /> : <Navigate to="/project" replace />}
         />
 
         {/* Shared Routes */}

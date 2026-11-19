@@ -30,13 +30,15 @@ public class GlobalExceptionHandler {
         Map<String, String> fieldErrors = new LinkedHashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(fe ->
                 fieldErrors.put(fe.getField(), fe.getDefaultMessage()));
-        var error = new ApiError(400, "VALIDATION_ERROR", "Validation failed", fieldErrors);
+        String firstMessage = fieldErrors.values().stream().findFirst().orElse("Validation failed");
+        var error = new ApiError(400, "VALIDATION_ERROR", firstMessage, fieldErrors);
         return ResponseEntity.badRequest().body(error);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiError> handleBadCredentials(BadCredentialsException ex) {
-        var error = new ApiError(401, "BAD_CREDENTIALS", "Invalid PNR or password");
+        String msg = (ex.getMessage() != null && !ex.getMessage().isBlank()) ? ex.getMessage() : "Invalid PNR or password";
+        var error = new ApiError(401, "BAD_CREDENTIALS", msg);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 

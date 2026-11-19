@@ -6,12 +6,26 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDate(date: string | Date, formatStr = 'MMM d, yyyy') {
-  return format(new Date(date), formatStr);
+export function formatDate(date: string | Date | undefined | null, formatStr = 'MMM d, yyyy') {
+  if (!date) return '-';
+  try {
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return '-';
+    return format(d, formatStr);
+  } catch {
+    return '-';
+  }
 }
 
-export function formatDateTime(date: string | Date) {
-  return format(new Date(date), 'MMM d, yyyy h:mm a');
+export function formatDateTime(date: string | Date | undefined | null) {
+  if (!date) return '-';
+  try {
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return '-';
+    return format(d, 'MMM d, yyyy h:mm a');
+  } catch {
+    return '-';
+  }
 }
 
 export function formatRelative(date: string | Date) {

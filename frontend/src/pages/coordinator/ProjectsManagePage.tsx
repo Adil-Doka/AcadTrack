@@ -90,9 +90,9 @@ export const ProjectsManagePage: React.FC = () => {
 
   const filteredProjects = projects?.filter(
     (p) =>
-      p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.teamName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.techStack.toLowerCase().includes(searchTerm.toLowerCase())
+      (p.title && p.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (p.teamName && p.teamName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (p.techStack && p.techStack.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   if (isLoading) return <PageLoading message="Loading project proposals..." />;
@@ -267,11 +267,17 @@ export const ProjectsManagePage: React.FC = () => {
           })}
         </div>
       ) : (
-        <EmptyState
-          icon={<FolderOpen className="w-10 h-10" />}
-          title="No Projects Found"
-          description="No projects match the current search or filters."
-        />
+        <Card className="p-8">
+          <EmptyState
+            icon={<FolderOpen className="w-12 h-12 text-slate-400" />}
+            title={projects && projects.length > 0 ? "No Matching Projects" : "No Projects Registered Yet"}
+            description={
+              projects && projects.length > 0
+                ? "No project proposals match the active search query or status filter."
+                : "No student teams have registered or submitted project proposals for this academic cycle yet."
+            }
+          />
+        </Card>
       )}
 
       {/* Reject Modal */}

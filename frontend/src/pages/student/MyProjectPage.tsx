@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { projectApi, teamApi, cycleApi, githubApi } from '@/lib/api';
@@ -35,6 +36,7 @@ const GithubIcon: React.FC<{ className?: string }> = ({ className = "w-5 h-5" })
 );
 
 export const MyProjectPage: React.FC = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -141,7 +143,7 @@ export const MyProjectPage: React.FC = () => {
   }
 
   const isLeader = team?.members?.some(
-    (m) => m.userId === user?.id && m.teamRole === 'LEADER'
+    (m: any) => m.userId === user?.id && (m.teamRole === 'LEADER' || m.role === 'LEADER')
   );
   const canEdit = isLeader && (!project || project.status === 'DRAFT' || project.status === 'REJECTED');
 
@@ -172,17 +174,43 @@ export const MyProjectPage: React.FC = () => {
     }
   };
 
+  if (!currentCycle && !cycles?.length && !isTeamLoading) {
+    return (
+      <div className="space-y-6">
+        <PageHeader
+          title="Project Overview"
+          subtitle="Manage your capstone proposal, tech stack, and GitHub repository integration"
+        />
+        <Card className="p-8">
+          <EmptyState
+            icon={<Calendar className="w-12 h-12 text-slate-400" />}
+            title="No Active Academic Cycle"
+            description="There is no active academic project cycle in session. Contact your coordinator to activate one."
+          />
+        </Card>
+      </div>
+    );
+  }
+
   if (!team) {
     return (
-      <EmptyState
-        icon={<FolderOpen className="w-10 h-10" />}
-        title="Team Required"
-        description="You need to be part of an approved team before creating or viewing a project."
-        action={{
-          label: 'Go to Team Page',
-          onClick: () => (window.location.href = '/team'),
-        }}
-      />
+      <div className="space-y-6">
+        <PageHeader
+          title="Project Overview"
+          subtitle="Manage your capstone proposal, tech stack, and GitHub repository integration"
+        />
+        <Card className="p-8">
+          <EmptyState
+            icon={<FolderOpen className="w-12 h-12 text-slate-400" />}
+            title="Team Required First"
+            description="You need to form or join an approved team before creating or viewing a project proposal."
+            action={{
+              label: 'Go to Team Page',
+              onClick: () => navigate('/team'),
+            }}
+          />
+        </Card>
+      </div>
     );
   }
 
@@ -194,19 +222,37 @@ export const MyProjectPage: React.FC = () => {
       />
 
       {!project ? (
-        <EmptyState
-          icon={<FolderOpen className="w-10 h-10" />}
-          title="No Project Proposal Yet"
-          description="Your team hasn't registered a project proposition yet. Define your project scope and submit it."
-          action={
-            isLeader
-              ? {
-                  label: 'Propose Project',
-                  onClick: openForm,
-                }
-              : undefined
-          }
-        />
+        <Card className="p-8">
+          {team.status !== 'APPROVED' ? (
+            <EmptyState
+              icon={<FolderOpen className="w-12 h-12 text-amber-500" />}
+              title="Team Pending Approval"
+              description={`Your team (${team.name}) is currently ${team.status.toLowerCase().replace('_', ' ')}. You can register a project proposal once your coordinator approves the team.`}
+              action={{
+                label: 'Check Team Status',
+                onClick: () => navigate('/team'),
+              }}
+            />
+          ) : (
+            <EmptyState
+              icon={<FolderOpen className="w-12 h-12 text-indigo-500" />}
+              title="No Project Proposal Yet"
+              description={
+                isLeader
+                  ? "Your team is approved! Define your project title, abstract, tech stack, and GitHub repository to begin."
+                  : "Your team is approved! Your team leader can now register and submit the project proposal."
+              }
+              action={
+                isLeader
+                  ? {
+                      label: 'Propose Project',
+                      onClick: openForm,
+                    }
+                  : undefined
+              }
+            />
+          )}
+        </Card>
       ) : (
         <motion.div
           initial={{ opacity: 0, y: 10 }}

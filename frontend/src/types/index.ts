@@ -34,7 +34,8 @@ export interface TeamMember {
   pnr: string;
   email: string;
   department: string;
-  teamRole: 'LEADER' | 'MEMBER';
+  teamRole?: 'LEADER' | 'MEMBER';
+  role?: 'LEADER' | 'MEMBER';
   joinedAt: string;
 }
 

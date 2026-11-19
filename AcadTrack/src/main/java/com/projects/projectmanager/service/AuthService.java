@@ -56,10 +56,10 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByPnr(request.pnr())
                 .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "BAD_CREDENTIALS",
-                        "Invalid PNR or password"));
+                        "No account found with PNR: " + request.pnr()));
 
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
-            throw new ApiException(HttpStatus.UNAUTHORIZED, "BAD_CREDENTIALS", "Invalid PNR or password");
+            throw new ApiException(HttpStatus.UNAUTHORIZED, "BAD_CREDENTIALS", "Incorrect password");
         }
 
         String token = tokenProvider.generateToken(user.getId(), user.getPnr(), user.getRole().name());

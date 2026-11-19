@@ -32,7 +32,12 @@ export const LoginPage: React.FC = () => {
       navigate('/dashboard');
     },
     onError: (err: any) => {
-      toast.error(err.response?.data?.message || 'Invalid credentials');
+      const msg =
+        err.response?.data?.message ||
+        (err.response?.data?.fieldErrors ? Object.values(err.response.data.fieldErrors)[0] : null) ||
+        err.message ||
+        'Invalid credentials';
+      toast.error(msg as string);
     },
   });
 
