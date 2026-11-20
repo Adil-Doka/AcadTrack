@@ -229,14 +229,35 @@ The frontend will be available at `http://localhost:5173`. Vite proxies API call
 
 ---
 
-## 🔑 Demo Credentials
+## 🔑 Demo & Sample Credentials (HOD Presentation)
 
-When the backend starts up, an initial Project Coordinator account is automatically bootstrapped:
+When the backend starts up, a rich set of realistic sample data is automatically seeded so you can demonstrate all roles and flows directly to your HOD:
 
-| Role | PNR / Username | Password |
-|---|---|---|
-| **Coordinator** | `COORD001` | `Coordinator@123` |
-| **New Student** | Self-register at `/register` | Minimum 8 characters |
+| Role | Name | PNR | Password | Notes / Team |
+|---|---|---|---|---|
+| **Coordinator** | Dr. Rajesh Sharma | `COORD001` | `Coordinator@123` | Full administrative & approval dashboard |
+| **Faculty Guide** | Dr. Sunita Deshmukh | `FAC001` | `Password@123` | Evaluated Phase 1 for NexusCore |
+| **Faculty Guide** | Prof. Amit Verma | `FAC002` | `Password@123` | Distributed systems & cloud mentor |
+| **Student (Leader)** | Aarav Patel | `STU2026001` | `Password@123` | **Leader** of team **NexusCore** (Approved Project) |
+| **Student (Member)** | Ananya Iyer | `STU2026002` | `Password@123` | Member of **NexusCore** |
+| **Student (Member)** | Rohan Kulkarni | `STU2026003` | `Password@123` | Member of **NexusCore** |
+| **Student (Leader)** | Sneha Nair | `STU2026004` | `Password@123` | **Leader** of team **CloudPulse** (Under Review) |
+| **Student (Member)** | Vikram Joshi | `STU2026005` | `Password@123` | Member of **CloudPulse** |
+| **Student (Member)** | Priya Rao | `STU2026006` | `Password@123` | Member of **CloudPulse** |
+
+### 📂 Pre-loaded Sample Projects for Demonstration:
+1. **Distributed Multi-Agent Task Orchestration Engine**
+   - **Team**: `NexusCore` (3 members)
+   - **Status**: `APPROVED`
+   - **Tech Stack**: Java 24, Spring Boot 4, Apache Kafka, React, Docker, MySQL, Redis
+   - **Phase 1 Milestone**: Submitted & Evaluated with **47.50 / 50.00** published marks.
+   - **GitHub Analytics**: 64 commits, 11 pull requests, 18 stars.
+
+2. **AI-Powered Automated Observability & Anomaly Detection**
+   - **Team**: `CloudPulse` (3 members)
+   - **Status**: `UNDER_REVIEW` (Ready for coordinator review and approval demo)
+   - **Tech Stack**: Python, FastAPI, Prometheus, Grafana, React, PyTorch
+   - **GitHub Analytics**: 38 commits, 5 pull requests, 9 stars.
 
 ---
 
@@ -327,3 +348,4 @@ node test-all-apis.js
 
 ## 📄 License
 This project is developed for academic project management and educational institutions.
+

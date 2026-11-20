@@ -20,6 +20,11 @@ public record RegisterRequest(
 
         String department,
         Integer year,
-        String division
-) {}
+        String division,
+        String role
+) {
+    public RegisterRequest(String pnr, String email, String password, String name, String department, Integer year, String division) {
+        this(pnr, email, password, name, department, year, division, null);
+    }
+}
 

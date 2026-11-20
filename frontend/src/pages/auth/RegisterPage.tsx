@@ -42,11 +42,17 @@ export const RegisterPage: React.FC = () => {
       navigate('/dashboard');
     },
     onError: (err: any) => {
-      const msg =
+      let msg =
         err.response?.data?.message ||
-        (err.response?.data?.fieldErrors ? Object.values(err.response.data.fieldErrors)[0] : null) ||
-        err.message ||
-        'Registration failed. Please check your details.';
+        (err.response?.data?.fieldErrors ? Object.values(err.response.data.fieldErrors)[0] : null);
+
+      if (!msg) {
+        if (err.message === 'Network Error' || !err.response) {
+          msg = 'Cannot connect to backend server. Please ensure the backend is running on http://localhost:8080.';
+        } else {
+          msg = err.message || 'Registration failed. Please check your details.';
+        }
+      }
       toast.error(msg as string);
     },
   });

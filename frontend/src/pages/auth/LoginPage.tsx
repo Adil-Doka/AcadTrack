@@ -32,11 +32,17 @@ export const LoginPage: React.FC = () => {
       navigate('/dashboard');
     },
     onError: (err: any) => {
-      const msg =
+      let msg =
         err.response?.data?.message ||
-        (err.response?.data?.fieldErrors ? Object.values(err.response.data.fieldErrors)[0] : null) ||
-        err.message ||
-        'Invalid credentials';
+        (err.response?.data?.fieldErrors ? Object.values(err.response.data.fieldErrors)[0] : null);
+
+      if (!msg) {
+        if (err.message === 'Network Error' || !err.response) {
+          msg = 'Cannot connect to backend server. Please ensure the backend is running on http://localhost:8080.';
+        } else {
+          msg = err.message || 'Invalid credentials';
+        }
+      }
       toast.error(msg as string);
     },
   });
